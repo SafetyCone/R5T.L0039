@@ -9,13 +9,11 @@ using R5T.T0194;
 namespace R5T.L0039.T000
 {
     /// <summary>
-    /// Visual Studio solution context.
+    /// An empty context for a general set of zero or more solutions.
     /// </summary>
     [ContextDefinitionMarker]
-    public interface ISolutionContext : IContextDefinitionMarker,
+    public interface ISolutionSetContext : IContextDefinitionMarker,
         ITextOutputtedContext
     {
-        public ISolutionName SolutionName { get; }
-        public ISolutionFilePath SolutionFilePath { get; }
     }
 }

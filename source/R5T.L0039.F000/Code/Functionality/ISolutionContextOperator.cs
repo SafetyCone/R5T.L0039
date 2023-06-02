@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using R5T.T0132;
@@ -19,7 +21,7 @@ namespace R5T.L0039.F000
             ISolutionFilePath solutionFilePath,
             ISolutionName solutionName,
             ITextOutput textOutput,
-            params Func<ISolutionContext, Task>[] operations)
+            IEnumerable<Func<ISolutionContext, Task>> operations)
         {
             await Instances.ContextOperator.In_Context(
                 () => new SolutionContext
@@ -32,14 +34,28 @@ namespace R5T.L0039.F000
                 Instances.ActionOperations.DoNothing_Synchronous);
         }
 
+        public Task In_SolutionContext(
+            ISolutionFilePath solutionFilePath,
+            ISolutionName solutionName,
+            ITextOutput textOutput,
+            params Func<ISolutionContext, Task>[] operations)
+        {
+            return this.In_SolutionContext(
+                solutionFilePath,
+                solutionName,
+                textOutput,
+                operations.AsEnumerable());
+        }
+
         /// <summary>
         /// Because this is a 'new' method, it will throw an exception if the solution file already exists.
+        /// Note: does not create the solution file.
         /// </summary>
         public Task In_New_SolutionContext(
             ISolutionFilePath solutionFilePath,
             ISolutionName solutionName,
             ITextOutput textOutput,
-            params Func<ISolutionContext, Task>[] operations)
+            IEnumerable<Func<ISolutionContext, Task>> operations)
         {
             Instances.FileSystemOperator.VerifyFileDoesNotExists(
                 solutionFilePath.Value);
@@ -49,6 +65,20 @@ namespace R5T.L0039.F000
                 solutionName,
                 textOutput,
                 operations);
+        }
+
+
+        public Task In_New_SolutionContext(
+            ISolutionFilePath solutionFilePath,
+            ISolutionName solutionName,
+            ITextOutput textOutput,
+            params Func<ISolutionContext, Task>[] operations)
+        {
+            return this.In_New_SolutionContext(
+                solutionFilePath,
+                solutionName,
+                textOutput,
+                operations.AsEnumerable());
         }
 
         /// <summary>

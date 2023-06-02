@@ -41,6 +41,26 @@ namespace R5T.L0039.O001
                 operations);
         }
 
+        public Func<ISolutionContext, Task> Add_Project(
+            IProjectFilePath projectFilePath,
+            bool addRecursiveProjectReferences = F0063.IValues.Default_AddRecursiveProjectReferences_Constant)
+        {
+            return solutionContext =>
+            {
+                Instances.SolutionFileOperator.AddProject(
+                    solutionContext.SolutionFilePath.Value,
+                    projectFilePath.Value);
+
+                var output = addRecursiveProjectReferences
+                    ? Instances.SolutionOperations.AddAllRecursiveProjectReferenceDependencies(
+                        solutionContext.SolutionFilePath.Value)
+                    : Task.CompletedTask
+                    ;
+
+                return output;
+            };
+        }
+
         public Func<ISolutionContext, Task> In_Add_New_ProjectContext(
             IProjectName projectName,
             Func<IProjectFileContext, Task> createNewProjectFileOperation,
@@ -94,6 +114,72 @@ namespace R5T.L0039.O001
                 projectName,
                 true,
                 createProjectOperations);
+        }
+
+        public Func<ISolutionContext, Task> In_Add_ProjectContext(
+            Func<ISolutionContext, IProjectContext> projectContextConstructor,
+            bool addRecursiveProjectReferences,
+            IEnumerable<Func<IProjectContext, Task>> createProjectOperations)
+        {
+            return solutionContext =>
+            {
+                var projectContextConstructor_Internal = () => projectContextConstructor(solutionContext);
+
+                var createProjectOperations_Modified = createProjectOperations
+                    .Append(
+                        Instances.ProjectContextOperations.Add_ToSolution(
+                            solutionContext.SolutionFilePath,
+                            addRecursiveProjectReferences)
+                    )
+                    ;
+
+                return Instances.ProjectContextOperator.In_ProjectContext(
+                    projectContextConstructor_Internal,
+                    createProjectOperations_Modified);
+            };
+        }
+
+        public Func<ISolutionContext, Task> In_Add_ProjectContext(
+            Func<ISolutionContext, IProjectContext> projectContextConstructor,
+            bool addRecursiveProjectReferences,
+            params Func<IProjectContext, Task>[] createProjectOperations)
+        {
+            return this.In_Add_ProjectContext(
+                projectContextConstructor,
+                addRecursiveProjectReferences,
+                createProjectOperations);
+        }
+
+        public Func<ISolutionContext, Task> In_Add_ProjectContext(
+            IProjectName projectName,
+            bool addRecursiveProjectReferences,
+            IEnumerable<Func<IProjectContext, Task>> createProjectOperations)
+        {
+            return this.In_Add_ProjectContext(
+                Instances.ProjectContextConstructors.Default(projectName),
+                addRecursiveProjectReferences,
+                createProjectOperations);
+        }
+
+        public Func<ISolutionContext, Task> In_Add_ProjectContext(
+            IProjectName projectName,
+            bool addRecursiveProjectReferences,
+            params Func<IProjectContext, Task>[] createProjectOperations)
+        {
+            return this.In_Add_ProjectContext(
+                projectName,
+                addRecursiveProjectReferences,
+                createProjectOperations.AsEnumerable());
+        }
+
+        public Func<ISolutionContext, Task> In_Add_ProjectContext(
+            IProjectName projectName,
+            params Func<IProjectContext, Task>[] createProjectOperations)
+        {
+            return this.In_Add_ProjectContext(
+                projectName,
+                Instances.Values.Default_AddRecursiveProjectReferences,
+                createProjectOperations.AsEnumerable());
         }
 
         /// <summary>
