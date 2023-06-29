@@ -9,7 +9,7 @@ using R5T.T0194;
 namespace R5T.L0039.T000
 {
     /// <summary>
-    /// Visual Studio solution context.
+    /// Visual Studio solution context, containing the solution file path.
     /// </summary>
     [ContextDefinitionMarker]
     public interface ISolutionContext : IContextDefinitionMarker,

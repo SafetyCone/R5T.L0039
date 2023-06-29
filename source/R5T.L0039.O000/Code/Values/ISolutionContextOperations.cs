@@ -26,6 +26,18 @@ namespace R5T.L0039.O000
             return Task.CompletedTask;
         }
 
+        public Func<ISolutionContext, Task> Set_DefaultStartupProject(Func<IProjectFilePath> defaultStartupProjectFilePathProvider)
+            => context =>
+            {
+                var defaultStartupProjectFilePath = defaultStartupProjectFilePathProvider();
+
+                Instances.SolutionOperator.Set_DefaultStartupProject(
+                    context.SolutionFilePath.Value,
+                    defaultStartupProjectFilePath.Value);
+
+                return Task.CompletedTask;
+            };
+
         public Func<ISolutionContext, Task> Set_SolutionDirectoryPath(IHasSolutionDirectoryPath hasSolutionDirectoryPath)
             => context => Instances.SolutionContextOperator_Internal.Set_SolutionDirectoryPath(
                 context,
