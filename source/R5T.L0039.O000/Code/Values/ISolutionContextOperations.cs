@@ -17,11 +17,17 @@ namespace R5T.L0039.O000
         /// </summary>
         public Task Create_New_SolutionFile(ISolutionContext solutionContext)
         {
+            solutionContext.TextOutput.WriteInformation("Creating new solution file...");
+
+            solutionContext.TextOutput.WriteInformation($"Verifying solution file does not already exist:\n\t{solutionContext.SolutionFilePath}");
+
             Instances.FileSystemOperator.VerifyFileDoesNotExists(
                 solutionContext.SolutionFilePath.Value);
 
             Instances.SolutionFileGenerator.Create_New(
                 solutionContext.SolutionFilePath.Value);
+
+            solutionContext.TextOutput.WriteInformation("Created new solution file.");
 
             return Task.CompletedTask;
         }
