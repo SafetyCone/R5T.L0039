@@ -148,7 +148,7 @@ namespace R5T.L0039.F000
             // Deal with the solution directory.
             if (deleteSolutionDirectory_IfExists)
             {
-                Instances.FileSystemOperator.DeleteDirectory_Idempotent(
+                Instances.FileSystemOperator.Delete_Directory_Idempotent(
                     solutionDirectoryPath.Value);
             }
 
