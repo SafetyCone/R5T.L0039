@@ -57,7 +57,7 @@ namespace R5T.L0039.F000
             ITextOutput textOutput,
             IEnumerable<Func<ISolutionContext, Task>> operations)
         {
-            Instances.FileSystemOperator.VerifyFileDoesNotExists(
+            Instances.FileSystemOperator.Verify_File_DoesNotExist(
                 solutionFilePath.Value);
 
             return this.In_SolutionContext(
@@ -90,7 +90,7 @@ namespace R5T.L0039.F000
             ITextOutput textOutput,
             params Func<ISolutionContext, Task>[] operations)
         {
-            Instances.FileSystemOperator.VerifyFileExists(
+            Instances.FileSystemOperator.Verify_File_Exists(
                 solutionFilePath.Value);
 
             return this.In_SolutionContext(

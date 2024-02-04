@@ -21,10 +21,10 @@ namespace R5T.L0039.O000
 
             solutionContext.TextOutput.WriteInformation($"Verifying solution file does not already exist:\n\t{solutionContext.SolutionFilePath}");
 
-            Instances.FileSystemOperator.VerifyFileDoesNotExists(
+            Instances.FileSystemOperator.Verify_File_DoesNotExist(
                 solutionContext.SolutionFilePath.Value);
 
-            Instances.SolutionFileGenerator.Create_New(
+            Instances.SolutionFileGenerator.New_Synchronous(
                 solutionContext.SolutionFilePath.Value);
 
             solutionContext.TextOutput.WriteInformation("Created new solution file.");
